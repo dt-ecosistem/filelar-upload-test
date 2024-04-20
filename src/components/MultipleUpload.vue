@@ -106,12 +106,12 @@ const fileInput: Ref<HTMLInputElement | null> = ref(null);
 
 const removeeeeee = (index: number) => {
 	pictures.value.splice(index, 1);
-	console.log(pictures.value);
+	// console.log(pictures.value);
 };
  const handleFileChange = (event: Event): void => {
 	const inputElement = event.target as HTMLInputElement;
 	const files: FileList | null = inputElement.files;
-	console.log(files);
+	// console.log(files);
 	if (!files) return;
 
 	for (const file of Array.from(files)) {
@@ -213,7 +213,7 @@ const reUpload = async (item: ImageItem): Promise<void> => {
 const upload = async () => {
 	if (pictures.value.length > 0) {
 		for (const i of pictures.value) {
-			console.log(i);
+			// console.log(i);
 
 			const imageItem = i as ImageItem;
 			if (imageItem.id != 1 && !imageItem.size) {
@@ -230,7 +230,7 @@ const upload = async () => {
             // ElMessage.error('Oops, this is a error message.')
 					}
 				} catch (e) {
-					console.log(e);
+					// console.log(e);
 						imageItem.id = 2;
 				}
 			}

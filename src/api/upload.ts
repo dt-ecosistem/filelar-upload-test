@@ -10,7 +10,7 @@ export async function uploadkatta(data: any) {
   formdata.append("tenantId", "test");
   formdata.append("module", "test");
   formdata.append("fileName", `test`);
-  formdata.append("file", data);
+  formdata.append("file", data.file);
 
   const response = await axios.post("http://192.168.100.241:9999/api/file/upload/public", formdata);
   console.log(response.data);

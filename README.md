@@ -1,4 +1,4 @@
-# Test-ts-unittest
+# p1_ts_test
 
 This template should help get you started developing with Vue 3 in Vite.
 
@@ -17,23 +17,23 @@ See [Vite Configuration Reference](https://vitejs.dev/config/).
 ## Project Setup
 
 ```sh
-npm install
+bun install
 ```
 
 ### Compile and Hot-Reload for Development
 
 ```sh
-npm run dev
+bun dev
 ```
 
 ### Type-Check, Compile and Minify for Production
 
 ```sh
-npm run build
+bun build
 ```
 
 ### Run Unit Tests with [Vitest](https://vitest.dev/)
 
 ```sh
-npm run test:unit
+bun test:unit
 ```

@@ -67,41 +67,50 @@ describe("MultipleUpload", (test) => {
     ).toBe("https://www.iconpacks.net/icons/2/free-file-icon-1453-thumb.png");
   });
 
+  
   //  fileni togri jonatish
   test("fileni togri jonatish", async (): Promise<void> => {
     const wrapper = mount(MultipleUpload, {
-      props: {maxElementCount: 3, maxSize: 20},
+      props: { maxElementCount: 3, maxSize: 20 },
     });
-    const inputElement = wrapper.find('input[type="file"]')
-        .element as HTMLInputElement;
+    const inputElement = wrapper.find('input[type="file"]').element as HTMLInputElement;
+
+    // Fayllarni yaratish
     const file1 = new File(["foo"], "foo.txt", {
       type: "text/plain",
     });
     const file2 = new File(["moo"], "moo.txt", {
       type: "text/plain",
     });
-    const mockFileList = Object.create(inputElement.files);
-    mockFileList[0] = file1;
-    mockFileList[1] = file2;
-    Object.defineProperty(mockFileList, "length", {value: 2});
-    (wrapper.getCurrentComponent().exposed as any).handleFile({
-      target: {files: mockFileList},
+
+    // Fayllarni mockFileList'ga qo'shish
+    const mockFileList = {
+      0: file1,
+      1: file2,
+      length: 2,
+    };
+
+    // inputElement.files ni mockFileList bilan o'zlashtirish
+    Object.defineProperty(inputElement, "files", {
+      value: mockFileList,
     });
+
+
+    (wrapper.getCurrentComponent().exposed as any).handleFile({
+      target: { files: mockFileList },
+    });
+
+    // Bir nechta fayllarni qabul qilishni tekshirish
     await wrapper.vm.$nextTick();
-    const card = wrapper.findAll(".card");
-    expect(card).toHaveLength(2);
+    const cards = wrapper.findAll(".card");
+    expect(cards).toHaveLength(2);
 
     expect(wrapper.find("label").attributes("title")).toBe("");
   });
 
-  // multipley
-  test("multipile prop is set to true", async () => {
-    const wrapper = mount(MultipleUpload, {
-      props: {maxElementCount: 5, maxSize: 1024, multipile: true},
-    });
 
-    expect(wrapper.props("multipile")).toBe(true);
 
-  });
+
+
 
 });

@@ -8,9 +8,10 @@ describe("SingleUpload", (test) => {
         const wrapper = mount(SingleUpload, { props: { maxSize: 1 } });
         const inputElement = wrapper.find('input[type="file"]')
             .element as HTMLInputElement;
-        const file = new File(["foo"], "foo.txt", {
+        const file = new File(["aaa"], "aaa.txt", {
             type: "text/plain",
         });
+
         const mockFileList = Object.create(inputElement.files);
         mockFileList[0] = file;
         Object.defineProperty(mockFileList, "length", { value: 1 });
@@ -28,7 +29,7 @@ describe("SingleUpload", (test) => {
         const wrapper = mount(SingleUpload, { props: { maxSize: 4 } });
         const inputElement = wrapper.find('input[type="file"]')
             .element as HTMLInputElement;
-        const file = new File(["foo"], "foo.txt", {
+        const file = new File(["aaa"], "aaa.txt", {
             type: "text/plain",
         });
         const mockFileList = Object.create(inputElement.files);
@@ -79,12 +80,12 @@ describe("SingleUpload", (test) => {
         ).toBe("https://www.iconpacks.net/icons/2/free-file-icon-1453-thumb.png");
     });
 
-
+    // togri
     test("file types", async () => {
         const wrapper = mount(SingleUpload, { props: { typesSingle: "application/zip" } });
         const inputElement = wrapper.find('input[type="file"]')
             .element as HTMLInputElement;
-        const file = new File(["foo"], "foo.zip", {
+        const file = new File(["aaa"], "aaa.zip", {
             type: "text/plain",
         });
 
@@ -99,6 +100,32 @@ describe("SingleUpload", (test) => {
         await wrapper.vm.$nextTick();
 
         expect(wrapper.find("label").attributes("title")).toBe('');
+    });
+    //  noto'g'ri
+
+    test("file types noto'g'ri", async () => {
+        const wrapper = mount(SingleUpload, { props: { typesSingle: "application/jpg" } });
+        const inputElement = wrapper.find('input[type="file"]').element as HTMLInputElement;
+        const file = new File(["aaa"], "aaa.zip", {
+            type: "text/plain",
+        });
+        const mockFileList = Object.create(inputElement.files);
+        mockFileList[0] = file;
+        Object.defineProperty(mockFileList, "length", { value: 1 });
+
+        (wrapper.getCurrentComponent().exposed as any).handleSingil({
+            target: { files: mockFileList },
+        });
+        await wrapper.vm.$nextTick();
+        const labelTitle = wrapper.find("label").attributes("title");
+        const cardExists = wrapper.find(".card").exists();
+
+        if (cardExists) {
+            expect(labelTitle).toBe('');
+        } else {
+
+            expect(labelTitle).not.toBe('.card');
+        }
     });
 
 

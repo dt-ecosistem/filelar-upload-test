@@ -3,7 +3,7 @@
     🚫 {{ props.maxSize / 1024 / 1024 }}MB dan katta file kiritmang
 <br />🚫 iltimos  {{ props.maxElementCount }}  fayildan boshqa kiritmang
   </p>
-   <p class="">multiple</p>
+   <p class="class" v-if="class" >multiple</p>
   <div class="px-[50px] pt-[20px] flex w-full flex-wrap gap-10 items-end">
 <!--chizish-->
     <div
@@ -60,7 +60,7 @@
 import { ref } from "vue";
 import type { AxiosResponse } from "axios";
 import type { Ref } from "vue";
-import  {uploadkatta} from "../api/upload";
+import  {uploadFile} from "../api/upload";
 import {ElMessage} from "element-plus";
 
 interface ImageItem {
@@ -72,7 +72,9 @@ interface ImageItem {
 const props = defineProps<{
   maxElementCount: number;
   maxSize: number;
-  multipile:boolean
+  multipl:boolean;
+
+
 }>();
 
 const images: Ref = ref([]);
@@ -80,12 +82,16 @@ const fileInput: Ref = ref(null);
 const isLoading: Ref = ref(false);
 const isMaxCount: Ref = ref(false);
 
+console.log(props.multipl)
+
 const handleFile = (event: Event): void => {
   const inputElement = event.target as HTMLInputElement;
   const files: FileList | null = inputElement.files;
 
   if (!files) return;
-  
+
+
+
   if (images.value.length < props.maxElementCount) {
     const filesToProcess = Array.from(files).slice(0, props.maxElementCount - images.value.length);
     if (files.length > props.maxElementCount) isMaxCount.value = true;
@@ -143,14 +149,13 @@ const handleFile = (event: Event): void => {
     return "https://www.iconpacks.net/icons/2/free-file-icon-1453-thumb.png";
   }
 }
-
 const remove = (index: number): void => { images.value.splice(index, 1) };
 
 const buttonClicked = async (item: ImageItem): Promise<void> => {
   if (item.id === 2) {
     isLoading.value = true;
 
-    const res: AxiosResponse = await uploadkatta(item);
+    const res: AxiosResponse = await uploadFile(item);
     if (res.status === 200) {
       item.id = 1;
     }
@@ -165,7 +170,7 @@ const save = async () => {
       const imageItem = img as ImageItem;
       if (imageItem.size && imageItem.id !== 1) {
         try {
-       const res =   await uploadkatta(imageItem);
+       const res =   await uploadFile(imageItem);
           imageItem.id = 1;
         } catch (error) {
           imageItem.id = 2;

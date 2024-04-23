@@ -1,19 +1,32 @@
 import axios from "axios";
 
-export async function uploadkatta(data: any) {
-  if (!data) {
+interface ImageItem {
+  image: string;
+  file: File;
+  size: boolean;
+  id: number;
+}
+
+export const uploadFile = async (payload: ImageItem) => {
+  if (!payload) {
     console.error("No file selected");
     return null;
   }
 
-  const formdata = new FormData();
-  formdata.append("tenantId", "test");
-  formdata.append("module", "test");
-  formdata.append("fileName", `test`);
-  formdata.append("file", data.file);
+  const data = new FormData();
+  data.append("module", "test");
+  data.append("tenantId", "test");
+  data.append("fileName", "test");
+  data.append("file", payload.file);
+  try {
+    const response = await axios.post("http://192.168.100.241:9999/api/file/upload/public", data);
+    console.log(response.data);
+    return response;
 
-  const response = await axios.post("http://192.168.100.241:9999/api/file/upload/public", formdata);
-  console.log(response.data);
-  return response;
+  } catch (error) {
+    console.error("Error uploading file:", error);
+    throw error;
+  }
 
-}
+};
+

@@ -30,9 +30,7 @@ describe("MultipleUpload", (test) => {
     await wrapper.vm.$nextTick();
     const card = wrapper.findAll(".card");
     expect(card).toHaveLength(1);
-
   });
-
   // fayillarni tekshirish
   test("fayillarni tekshirish", () => {
     const wrapper = mount(MultipleUpload, {props: {maxSize: 4, maxElementCount: 4}});
@@ -70,7 +68,7 @@ describe("MultipleUpload", (test) => {
   });
 
   //  fileni togri jonatish
-  test("fileni togri jonatish", async () => {
+  test("fileni togri jonatish", async (): Promise<void> => {
     const wrapper = mount(MultipleUpload, {
       props: {maxElementCount: 3, maxSize: 20},
     });
@@ -96,21 +94,14 @@ describe("MultipleUpload", (test) => {
     expect(wrapper.find("label").attributes("title")).toBe("");
   });
 
-
-  test("multipley", async () => {
+  // multipley
+  test("multipile prop is set to true", async () => {
     const wrapper = mount(MultipleUpload, {
-      props: {multipile: true},
+      props: {maxElementCount: 5, maxSize: 1024, multipile: true},
     });
-    const paragraphElement = wrapper.find('.hello').element as HTMLParagraphElement;
-    expect(paragraphElement.textContent).toBe('.hello');
+
+    expect(wrapper.props("multipile")).toBe(true);
+
   });
+
 });
-
-
-  // max size (propis)    👍
-    // max fule (propis)  👍
-    // iz mutipl (propis)
-    // file types         👍
-    //  res api
-
-

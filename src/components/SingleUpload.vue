@@ -20,7 +20,7 @@
         type="file"
         class="hidden"
         ref="fileInput"
-        @change="handleFileChange"
+        @change="handleSingil"
       />
       <i v-if="!fileType" class="fa-solid fa-cloud-arrow-up text-[25px]"></i>
       <h1 v-if="!fileType">Choose File</h1>
@@ -54,6 +54,8 @@
       <h1>Upload</h1>
     </button>
   </div>
+  <p>{{props.typesSingle}}</p>
+
 </template>
 
 <script setup lang="ts">
@@ -61,9 +63,10 @@ import { ref } from "vue";
 
 const props = defineProps<{
   maxSize: number;
+  typesSingle:string;
 }>();
 
-import {uploadkatta} from "../api/upload";
+import {uploadFile} from "../api/upload";
 import {ElMessage} from "element-plus";
 interface ImageItem {
   image: string;
@@ -78,9 +81,16 @@ const fileContent = ref("");
 const fileInput = ref<HTMLInputElement | null>(null);
 const isLoading = ref(false);
 
+
+console.log("prop",props)
+
+
+
 const choosenFile = ref<File | null>(null);
 const isHighSize = ref(false);
-const handleFileChange = (event: Event): void => {
+
+
+const handleSingil = (event: Event): void => {
   isHighSize.value = false;
   isLoaded.value = false;
   const file = (event.target as HTMLInputElement).files?.[0];
@@ -89,6 +99,8 @@ const handleFileChange = (event: Event): void => {
       isHighSize.value = true;
     }
     fileType.value = file.type;
+
+    if (props.typesSingle === fileType.value)  {
     if (fileType.value.startsWith("image/")) {
       const reader = new FileReader();
       reader.onload = () => {
@@ -99,10 +111,11 @@ const handleFileChange = (event: Event): void => {
       fileContent.value = getFileTpes(fileType.value);
     }
     choosenFile.value = file;
+
+    }
+
   }
 };
-
-
 
 const isLoaded = ref(false);
 const isFailed = ref(false);
@@ -117,7 +130,7 @@ const save = async (): Promise<void> => {
     data.image = fileContent.value;
 
     try {
-      await uploadkatta(data);
+      await uploadFile(data);
       data.id = 1;
       isLoaded.value = true;
       isFailed.value = false;
@@ -157,7 +170,7 @@ const getFileTpes=(fileType: string):string=>{
 }
 
 defineExpose({
-  handleFileChange,
+  handleSingil,
   getFileTpes,
   // getData,
 });

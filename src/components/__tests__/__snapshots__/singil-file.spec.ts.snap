@@ -1,0 +1,23 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`SingleUpload > check to snapshot SingleUpload 1`] = `
+"<p class="px-[20px] mt-[40px] font-bold text-[15px]"> 🚫 0.000003814697265625MB dan katta file kiritmang </p>
+<div class="px-[50px] pt-[20px] flex items-end gap-10"><label title="" for="inputField" class="w-[230px] h-[200px] flex flex-col gap-3 justify-center items-center bg-slate-200 rounded-md shadow-lg cursor-pointer hover:bg-slate-300 relative">
+    <!--v-if--><input id="inputField" type="file" class="hidden"><i class="fa-solid fa-cloud-arrow-up text-[25px]"></i>
+    <h1>Choose File</h1><img src="" class="max-w-[100%] max-h-[100%]">
+  </label><button class="button px-5 py-3 rounded-full bg-blue-400 text-white flex gap-3 items-center justify-center" title="">
+    <!--v-if-->
+    <h1>Upload</h1>
+  </button></div>"
+`;
+
+exports[`SingleUpload > maxsiz bormi yoqmi 1`] = `
+"<p class="px-[20px] mt-[40px] font-bold text-[15px]"> 🚫 0.000003814697265625MB dan katta file kiritmang </p>
+<div class="px-[50px] pt-[20px] flex items-end gap-10"><label title="" for="inputField" class="w-[230px] h-[200px] flex flex-col gap-3 justify-center items-center bg-slate-200 rounded-md shadow-lg cursor-pointer hover:bg-slate-300 relative">
+    <!--v-if--><input id="inputField" type="file" class="hidden"><i class="fa-solid fa-cloud-arrow-up text-[25px]"></i>
+    <h1>Choose File</h1><img src="" class="max-w-[100%] max-h-[100%]">
+  </label><button class="button px-5 py-3 rounded-full bg-blue-400 text-white flex gap-3 items-center justify-center" title="">
+    <!--v-if-->
+    <h1>Upload</h1>
+  </button></div>"
+`;

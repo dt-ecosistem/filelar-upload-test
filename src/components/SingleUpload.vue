@@ -1,5 +1,6 @@
 <template>
-
+  <p data-test-error-message >siz katta mg yukladiz  </p>
+  <p data-test-true>siz togri file kiritingiz </p>
   <div class="px-[50px] pt-[20px] flex items-end gap-10">
     <label
       :title="isHighSize ? 'Size is too high' : ''"
@@ -86,6 +87,7 @@ console.log("prop",props)
 
 const choosenFile = ref<File | null>(null);
 const isHighSize = ref(false);
+
 
 
 const handleSingil = (event: Event): void => {

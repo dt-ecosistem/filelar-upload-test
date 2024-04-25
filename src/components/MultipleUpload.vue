@@ -1,7 +1,7 @@
 <template>
 
   <div class="px-[50px] pt-[20px] flex w-full flex-wrap gap-10 items-end">
-    <p data-test-error-message >siz katta mg yukladiz</p>
+    <p data-test-error-message >siz katta mg yukladiz  yoki kop file kiritingiz</p>
     <p data-test-true>siz togri file kiritingiz </p>
 <!--chizish-->
     <div
@@ -32,6 +32,7 @@
       :title="isMaxCount ? 'You select maximum count file' : ''"
     >
       <input
+             v-if="props.multipl"
              id="inputField1"
              type="file"
              multiple
@@ -39,7 +40,14 @@
              ref="fileInput"
              @change="handleFile"
       />
-
+      <input
+          v-else
+          id="inputField1"
+          type="file"
+          class="hidden"
+          ref="fileInput"
+          @change="handleFile"
+      />
       <i class="fa-solid fa-cloud-arrow-up text-[25px]"></i>
       <h1>Choose File</h1>
     </label>
@@ -70,7 +78,7 @@ interface ImageItem {
 const props = defineProps<{
   maxElementCount: number;
   maxSize: number;
-  multipl:boolean;
+  multipl:true;
 
 
 }>();
@@ -125,9 +133,9 @@ const handleFile = (event: Event): void => {
   } else {
     isMaxCount.value = true;
     ElMessage.error('You can select 5 files with maximum", "danger')
-
   }
 };
+
  const getFileTpes=(fileType: string):string=>{
   if (fileType.startsWith("video/")) {
     return "/video-icon.jpg";
@@ -158,7 +166,6 @@ const buttonClicked = async (item: ImageItem): Promise<void> => {
   }
   isLoading.value = false;
 };
-
 const save = async () => {
   if (images.value.length > 0) {
     isLoading.value = true;

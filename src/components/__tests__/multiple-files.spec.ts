@@ -19,6 +19,9 @@ describe("MultipleUpload", (test) => {
     expect(
         (wrapper.getCurrentComponent().exposed as any).getFileTpes("video/")
     ).toBe("/video-icon.jpg");
+    
+
+
     expect(
         (wrapper.getCurrentComponent().exposed as any).getFileTpes("audio/")
     ).toBe("/audio-icon.jpg");
@@ -75,7 +78,7 @@ describe("MultipleUpload", (test) => {
   })
 
   // maxsizda hacha file yuklasa true chiiqshu kerak
-  test('maxSize va kam fayli yuklasa rost chisain ', async () => {
+  test('true chisain if maxSize and low file load ', async () => {
     const wrapper = mount(MultipleUpload, {
       props: {
         maxSize: 5
@@ -100,12 +103,117 @@ describe("MultipleUpload", (test) => {
 
   })
 
+  // maxFile kop hacha file yuklasa false chiiqshu kerak
+  test('Max element 2 we 3 takiritsag errors ', async () => {
+    const wrapper = mount(MultipleUpload, {
+      props: {
+        maxElementCount: 2
+      }
 
+    })
+    const inputElement = wrapper.find('input[type="file"]').element as HTMLInputElement
+    const file = new File(['22'], 'foo.txt', {
+      type: 'text/plain'
+    })
+    const mockFileList = Object.create(inputElement.files)
+    mockFileList[0] = file
+    mockFileList[1] = file
+    mockFileList[2] = file
+    Object.defineProperty(mockFileList, 'length', { value: 3 })
+    ;(wrapper.getCurrentComponent().exposed as unknown as any).handleFile({
+      target: { files: mockFileList }
+    })
 
+    await nextTick()
 
+    const errorMessageElement = wrapper.find('p[data-test-error-message')
 
+    expect(errorMessageElement.exists()).toBe(true)
 
+  })
 
+  // maxsizda hacha file yuklasa true chiiqshu kerak
+  test('enter 1 if 2 to max file', async () => {
+    const wrapper = mount(MultipleUpload, {
+      props: {
+        maxElementCount: 2
+      }
 
+    })
+    const inputElement = wrapper.find('input[type="file"]').element as HTMLInputElement
+    const file = new File(['22'], 'foo.txt', {
+      type: 'text/plain'
+    })
+    const mockFileList = Object.create(inputElement.files)
+    mockFileList[0] = file
 
+    Object.defineProperty(mockFileList, 'length', { value: 1 })
+    ;(wrapper.getCurrentComponent().exposed as unknown as any).handleFile({
+      target: { files: mockFileList }
+    })
+
+    await nextTick()
+
+    const errorMessageElement = wrapper.find('p[data-test-true]')
+
+    expect(errorMessageElement.exists()).toBe(true)
+
+  })
+
+//    multipil true
+
+  test('give multiplication from porps as true fols ', async () => {
+    const wrapper = mount(MultipleUpload, {
+      props: {
+        multipl: true
+      }
+
+    })
+    const inputElement = wrapper.find('input[type="file"]').element as HTMLInputElement
+    const file = new File(['22hh'], 'foo.txt', {
+      type: 'text/plain'
+    })
+    const mockFileList = Object.create(inputElement.files)
+
+    mockFileList[0] = file
+    mockFileList[1] = file
+
+    Object.defineProperty(mockFileList, 'length', { value: 2})
+    ;(wrapper.getCurrentComponent().exposed as unknown as any).handleFile({
+      target: { files: mockFileList }
+    })
+    await nextTick()
+
+    const errorMessageElement = wrapper.find('p[data-test-true]')
+
+    expect(errorMessageElement.exists()).toBe(true)
+  })
+
+  // propis multiple false
+  test('muiltple false bolsa 1 March 2 would sharpen tonatayabsiz', async () => {
+    const wrapper = mount(MultipleUpload, {
+      props: {
+        multipl: false
+      }
+
+    })
+    const inputElement = wrapper.find('input[type="file"]').element as HTMLInputElement
+    const file = new File(['22hh'], 'foo.txt', {
+      type: 'text/plain'
+    })
+    const mockFileList = Object.create(inputElement.files)
+
+    mockFileList[0] = file
+    mockFileList[1] = file
+
+    Object.defineProperty(mockFileList, 'length', { value: 2})
+    ;(wrapper.getCurrentComponent().exposed as unknown as any).handleFile({
+      target: { files: mockFileList }
+    })
+    await nextTick()
+
+    const errorMessageElement = wrapper.find('p[data-test-error-message]')
+
+    expect(errorMessageElement.exists()).toBe(true)
+  })
 });

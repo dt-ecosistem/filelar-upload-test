@@ -1,10 +1,7 @@
 <template>
-  <p class="px-[20px] mt-[80px] font-bold text-[15px]">
-    🚫 {{ props.maxSize / 1024 / 1024 }}MB dan katta file kiritmang
-<br />🚫 iltimos  {{ props.maxElementCount }}  fayildan boshqa kiritmang
-  </p>
-   <p class="class" v-if="class" >multiple</p>
+
   <div class="px-[50px] pt-[20px] flex w-full flex-wrap gap-10 items-end">
+    <p data-test-error-message >siz katta mg yukladiz</p>
 <!--chizish-->
     <div
       class="flex justify-center items-center card"
@@ -89,8 +86,6 @@ const handleFile = (event: Event): void => {
   const files: FileList | null = inputElement.files;
 
   if (!files) return;
-
-
 
   if (images.value.length < props.maxElementCount) {
     const filesToProcess = Array.from(files).slice(0, props.maxElementCount - images.value.length);

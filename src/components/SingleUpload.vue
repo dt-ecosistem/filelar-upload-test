@@ -1,7 +1,5 @@
 <template>
-  <p class="px-[20px] mt-[40px] font-bold text-[15px]">
-    🚫 {{ props.maxSize / 1024 / 1024 }}MB dan katta file kiritmang
-  </p>
+
   <div class="px-[50px] pt-[20px] flex items-end gap-10">
     <label
       :title="isHighSize ? 'Size is too high' : ''"
@@ -54,7 +52,7 @@
       <h1>Upload</h1>
     </button>
   </div>
-  <p>{{props.typesSingle}}</p>
+<!--  <p>{{props.typesSingle}}</p>-->
 
 </template>
 

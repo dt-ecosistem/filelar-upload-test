@@ -53,3 +53,5 @@ exports[`MultipleUpload > propisni tekshiradi 1`] = `
     <h1>Upload</h1>
   </button></div>"
 `;
+
+exports[`MultipleUpload > should render File input 1`] = `"<input id="inputField1" type="file" multiple="" class="hidden">"`;

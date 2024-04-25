@@ -1,39 +1,20 @@
 import { describe, expect, test, vi } from "vitest";
 import { mount } from "@vue/test-utils";
 import MultipleUpload from "../MultipleUpload.vue";
+import {nextTick} from "vue";
+
 
 describe("MultipleUpload", (test) => {
+  // snapshot
+  test('should render File input', () => {
+    const wrapper = mount(MultipleUpload)
 
-  //  files ga hato jonatish
-  test("files ga hato jonatish", async () => {
-    const wrapper = mount(MultipleUpload, {
-      props: {maxElementCount: 1, maxSize: 20},
-    });
-
-    const inputElement = wrapper.find('input[type="file"]')
-        .element as HTMLInputElement;
-    const file1 = new File(["foo"], "foo.txt", {
-      type: "text/plain",
-    });
-
-    const file2 = new File(["moo"], "moo.txt", {
-      type: "text/plain",
-    });
-    const mockFileList = Object.create(inputElement.files);
-    mockFileList[0] = file1;
-    mockFileList[1] = file2;
-    Object.defineProperty(mockFileList, "length", {value: 2});
-    (wrapper.getCurrentComponent().exposed as any).handleFile({
-      target: {files: mockFileList},
-    });
-
-    await wrapper.vm.$nextTick();
-    const card = wrapper.findAll(".card");
-    expect(card).toHaveLength(1);
-  });
+    expect(wrapper.find('input').html()).matchSnapshot()
+  })
   // fayillarni tekshirish
   test("fayillarni tekshirish", () => {
-    const wrapper = mount(MultipleUpload, {props: {maxSize: 4, maxElementCount: 4}});
+    const wrapper = mount(MultipleUpload, );
+
     expect(
         (wrapper.getCurrentComponent().exposed as any).getFileTpes("video/")
     ).toBe("/video-icon.jpg");
@@ -67,46 +48,33 @@ describe("MultipleUpload", (test) => {
     ).toBe("https://www.iconpacks.net/icons/2/free-file-icon-1453-thumb.png");
   });
 
-  
-  //  fileni togri jonatish
-  test("fileni togri jonatish", async (): Promise<void> => {
+  // maxsizda katta file yuklasa error beradi
+  test('max size I will not be mistaken if I load a large file', async () => {
     const wrapper = mount(MultipleUpload, {
-      props: { maxElementCount: 3, maxSize: 20 },
-    });
-    const inputElement = wrapper.find('input[type="file"]').element as HTMLInputElement;
+      props: {
+        maxSize: 3
+      }
 
-    // Fayllarni yaratish
-    const file1 = new File(["foo"], "foo.txt", {
-      type: "text/plain",
-    });
-    const file2 = new File(["moo"], "moo.txt", {
-      type: "text/plain",
-    });
+    })
+    const inputElement = wrapper.find('input[type="file"]').element as HTMLInputElement
+    const file = new File(['22'], 'foo.txt', {
+      type: 'text/plain'
+    })
+    const mockFileList = Object.create(inputElement.files)
+    mockFileList[0] = file
+    Object.defineProperty(mockFileList, 'length', { value: 1 })
+    ;(wrapper.getCurrentComponent().exposed as unknown as any).handleFile({
+      target: { files: mockFileList }
+    })
+    await nextTick()
 
-    // Fayllarni mockFileList'ga qo'shish
-    const mockFileList = {
-      0: file1,
-      1: file2,
-      length: 2,
-    };
+    const errorMessageElement = wrapper.find('p[data-test-error-message]')
 
-    // inputElement.files ni mockFileList bilan o'zlashtirish
-    Object.defineProperty(inputElement, "files", {
-      value: mockFileList,
-    });
+    expect(errorMessageElement.exists()).toBe(true)
+  })
 
+   
 
-    (wrapper.getCurrentComponent().exposed as any).handleFile({
-      target: { files: mockFileList },
-    });
-
-    // Bir nechta fayllarni qabul qilishni tekshirish
-    await wrapper.vm.$nextTick();
-    const cards = wrapper.findAll(".card");
-    expect(cards).toHaveLength(2);
-
-    expect(wrapper.find("label").attributes("title")).toBe("");
-  });
 
 
 

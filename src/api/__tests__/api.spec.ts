@@ -3,7 +3,6 @@ import { mount } from "@vue/test-utils";
 import {uploadFile} from "../upload";
 import {AxiosResponse} from "axios";
 
-
 describe("MultipleUpload", () => {
     test("apiga sorov jonatish", async () => {
         const payload = {

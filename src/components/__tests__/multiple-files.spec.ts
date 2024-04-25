@@ -161,7 +161,6 @@ describe("MultipleUpload", (test) => {
   })
 
 //    multipil true
-
   test('give multiplication from porps as true fols ', async () => {
     const wrapper = mount(MultipleUpload, {
       props: {
@@ -216,4 +215,5 @@ describe("MultipleUpload", (test) => {
 
     expect(errorMessageElement.exists()).toBe(true)
   })
+
 });

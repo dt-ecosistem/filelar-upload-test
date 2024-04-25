@@ -2,6 +2,7 @@
 
   <div class="px-[50px] pt-[20px] flex w-full flex-wrap gap-10 items-end">
     <p data-test-error-message >siz katta mg yukladiz</p>
+    <p data-test-true>siz togri file kiritingiz </p>
 <!--chizish-->
     <div
       class="flex justify-center items-center card"

@@ -3,16 +3,17 @@ import { mount } from "@vue/test-utils";
 import MultipleUpload from "../MultipleUpload.vue";
 import {nextTick} from "vue";
 
-
 describe("MultipleUpload", (test) => {
+
   // snapshot
   test('should render File input', () => {
     const wrapper = mount(MultipleUpload)
 
     expect(wrapper.find('input').html()).matchSnapshot()
   })
+
   // fayillarni tekshirish
-  test("fayillarni tekshirish", () => {
+  test("checking for inbo come-in file", () => {
     const wrapper = mount(MultipleUpload, );
 
     expect(
@@ -57,7 +58,7 @@ describe("MultipleUpload", (test) => {
 
     })
     const inputElement = wrapper.find('input[type="file"]').element as HTMLInputElement
-    const file = new File(['22'], 'foo.txt', {
+    const file = new File(['22hh'], 'foo.txt', {
       type: 'text/plain'
     })
     const mockFileList = Object.create(inputElement.files)
@@ -73,7 +74,33 @@ describe("MultipleUpload", (test) => {
     expect(errorMessageElement.exists()).toBe(true)
   })
 
-   
+  // maxsizda hacha file yuklasa true chiiqshu kerak
+  test('maxSize va kam fayli yuklasa rost chisain ', async () => {
+    const wrapper = mount(MultipleUpload, {
+      props: {
+        maxSize: 5
+      }
+
+    })
+    const inputElement = wrapper.find('input[type="file"]').element as HTMLInputElement
+    const file = new File(['22'], 'foo.txt', {
+      type: 'text/plain'
+    })
+    const mockFileList = Object.create(inputElement.files)
+    mockFileList[0] = file
+    Object.defineProperty(mockFileList, 'length', { value: 1 })
+    ;(wrapper.getCurrentComponent().exposed as unknown as any).handleFile({
+      target: { files: mockFileList }
+    })
+    await nextTick()
+
+    const errorMessageElement = wrapper.find('p[data-test-true]')
+
+    expect(errorMessageElement.exists()).toBe(true)
+
+  })
+
+
 
 
 

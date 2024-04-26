@@ -1,61 +1,53 @@
 import { describe, expect, test, vi } from "vitest";
 import { mount } from "@vue/test-utils";
 import SingleUpload from "../SingleUpload.vue";
-import {nextTick} from "vue";
 
 describe("SingleUpload", (test) => {
+  test("should render error message with text 'Size is too high'", async () => {
+    const wrapper = mount(SingleUpload, { props: { maxSize: 1,typesSingle:'application/zip' } });
+    const inputElement = wrapper.find('input[type="file"]')
+      .element as HTMLInputElement;
+    const file = new File(["foo"], "foo.txt", {
+      type: "text/plain",
+    });
+    const mockFileList = Object.create(inputElement.files);
+    mockFileList[0] = file;
+    Object.defineProperty(mockFileList, "length", { value: 1 });
 
-    // maxsizda katta file yuklasa error beradi
-    test('max size I will not be mistaken if I load a large file', async () => {
-        const wrapper = mount(SingleUpload, {
-            props: {
-                maxSize: 3
-            }
+    (wrapper.getCurrentComponent().exposed as any).handleSingil({
+      target: { files: mockFileList },
+    });
+ 
+    await wrapper.vm.$nextTick();
 
-        })
-        const inputElement = wrapper.find('input[type="file"]').element as HTMLInputElement
-        const file = new File(['22hh'], 'foo.txt', {
-            type: 'text/plain'
-        })
-        const mockFileList = Object.create(inputElement.files)
-        mockFileList[0] = file
-        Object.defineProperty(mockFileList, 'length', { value: 1 })
-        ;(wrapper.getCurrentComponent().exposed as unknown as any).handleSingil({
-            target: { files: mockFileList }
-        })
-        await nextTick()
+    expect(wrapper.find("label").attributes("title")).toBe("Size is too high");
+  });
 
-        const errorMessageElement = wrapper.find('p[data-test-error-message]')
+  test("should render a file input with OK", async () => {
+    const wrapper = mount(SingleUpload, { props: { maxSize: 4 ,typesSingle:'application/zip'} });
+    const inputElement = wrapper.find('input[type="file"]')
+      .element as HTMLInputElement;
+    const file = new File(["fho"], "foo.txt", {
+      type: "text/plain",
+    });
 
-        expect(errorMessageElement.exists()).toBe(true)
-    })
+    const mockFileList = Object.create(inputElement.files);
+    mockFileList[0] = file;
+    Object.defineProperty(mockFileList, "length", { value: 1 });
 
-    // maxsizda hacha file yuklasa true chiiqshu kerak
-    test('maxSize va kam fayli yuklasa rost chisain ', async () => {
-        const wrapper = mount(SingleUpload, {
-            props: {
-                maxSize: 5
-            }
+    (wrapper.getCurrentComponent().exposed as any).handleSingil({
+      target: { files: mockFileList },
+    });
+    await wrapper.vm.$nextTick();
 
-        })
-        const inputElement = wrapper.find('input[type="file"]').element as HTMLInputElement
-        const file = new File(['22'], 'foo.txt', {
-            type: 'text/plain'
-        })
-        const mockFileList = Object.create(inputElement.files)
-        mockFileList[0] = file
-        Object.defineProperty(mockFileList, 'length', { value: 1 })
-        ;(wrapper.getCurrentComponent().exposed as unknown as any).handleSingil({
-            target: { files: mockFileList }
-        })
-        await nextTick()
+    expect(wrapper.find("label").attributes("title")).toBe("");
+  });
 
-        const errorMessageElement = wrapper.find('p[data-test-true]')
+  test("check to snapshot SingleUpload", async () => {
+    const wrapper = mount(SingleUpload, { props: { maxSize: 4,typesSingle:'application/zip' } });
+    expect(wrapper.html()).toMatchSnapshot();
+  });
 
-        expect(errorMessageElement.exists()).toBe(true)
-
-    })
-
-
-
+ 
+ 
 });

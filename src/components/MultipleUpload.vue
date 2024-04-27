@@ -6,23 +6,16 @@
 			v-for="(item, index) in images"
 			:key="index"
 		>
+		
 			<div
 				@click="buttonClicked(item)"
 				class="w-[200px] h-[200px] relative flex clickCard"
 				:title="!item.size ? 'error' : ''"
 			>
-				<i
-					v-if="!item.size"
-					class="absolute fa-solid top-3 right-3 fa-circle-xmark text-red-600 text-[23px]"
-				></i>
-				<i
-					v-if="item.id == 1"
-					class="absolute fa-solid top-3 right-3 fa-circle-check text-green-600 text-[23px]"
-				></i>
-				<i
-					v-if="item.id == 2"
-					class="absolute fa-solid top-3 right-3 fa-circle-exclamation text-red-600 text-[23px]"
-				></i>
+				<img :src="getIcon(item.size!)" alt="" 		class="absolute fa-solid top-3 right-3 fa-circle-xmark text-red-600 text-[23px]"
+		>
+				
+
 				<button
 					class="absolute left-0 top-0 border-2 border-red-600 px-3 py-1 bg-white text-red-500 rounded-full text-[14px]"
 					@click="remove(index)"
@@ -37,17 +30,9 @@
 			class="w-[230px] h-[200px] flex flex-col gap-3 justify-center items-center bg-slate-200 rounded-md shadow-lg cursor-pointer hover:bg-slate-300"
 			:title="isMaxCount ? 'You select maximum count file' : ''"
 		>
+			
 			<input
-				v-if="props.multipl"
-				id="inputField1"
-				type="file"
 				multiple
-				class="hidden"
-				ref="fileInput"
-				@change="handleFile"
-			/>
-			<input
-				v-else
 				id="inputField1"
 				type="file"
 				class="hidden"
@@ -73,13 +58,15 @@ import type { AxiosResponse } from "axios";
 import type { Ref } from "vue";
 import { uploadFile } from "../api/upload";
 import { ElMessage } from "element-plus";
-
+import  {getFileTpes}  from "../data/imglar"
+import  {getIcon}  from "../data/status"
 interface ImageItem {
 	image: string;
 	file: File;
 	size: boolean;
 	id: number;
 }
+
 const props = defineProps({
 	maxElementCount: {
 		type: Number,
@@ -89,6 +76,7 @@ const props = defineProps({
 		type: Number,
 		default: 10 * 1024 * 1024,
 	},
+
 	typesMulti: {
 		type: String,
 		default: "application/zip",
@@ -109,10 +97,11 @@ console.log(props.multipl);
 const handleFile = (event: Event): void => {
 	const inputElement = event.target as HTMLInputElement;
 	const files: FileList | null = inputElement.files;
+console.log(files);
 
 	if (!files) return;
  
-	if (images.value.length < props.maxElementCount) {
+	if (images.value.length < props.maxElementCount && props.typesMulti ===files[0].type) {
 		const filesToProcess = Array.from(files).slice(0, props.maxElementCount - images.value.length);
 		if (files.length > props.maxElementCount) isMaxCount.value = true;
 		
@@ -122,16 +111,10 @@ const handleFile = (event: Event): void => {
 				return;
 			}
 		}
-
-
-
-
+    
 		for (const file of filesToProcess) {
 			const size: boolean = file.size <= props.maxSize;
-			if (props.typesMulti === file.type) {
-				isMaxCount.value = true;
-				return;
-             }
+			
 			if (file.type ==="image/") {
 				const reader = new FileReader();
 				reader.onload = () => {
@@ -143,15 +126,7 @@ const handleFile = (event: Event): void => {
 					});
 				};
 				reader.readAsDataURL(file);
-			} else if (
-				file.type === "video/" ||
-				file.type ==="audio/" ||
-				file.type==="application/pdf" ||
-				file.type ==="application/zip" ||
-				file.type ==="application/sql" ||
-				file.type ==="text/html" ||
-				file.type !== ""
-			) {
+			} else {
 				images.value.push({
 					image: getFileTpes(file.type),
 					file,
@@ -162,42 +137,31 @@ const handleFile = (event: Event): void => {
 		}
 	} else {
 		isMaxCount.value = true;
-		ElMessage.error('You can select 5 files with maximum", "danger');
+		ElMessage.error('siz yo 5 ta filedan kop yukladiz ", " yoki kiritilgan typedan bosha kiritingiz');
 	}
 };
 
-const getFileTpes = (fileType: string): string => {
-	if (fileType.startsWith("video/")) {
-		return "/video-icon.jpg";
-	} else if (fileType.startsWith("audio/")) {
-		return "/audio-icon.jpg";
-	} else if (fileType.startsWith("application/pdf")) {
-		return "https://play-lh.googleusercontent.com/9XKD5S7rwQ6FiPXSyp9SzLXfIue88ntf9sJ9K250IuHTL7pmn2-ZB0sngAX4A2Bw4w";
-	} else if (fileType.startsWith("application/zip")) {
-		return "https://d1nhio0ox7pgb.cloudfront.net/_img/g_collection_png/standard/512x512/folder_zip.png";
-	} else if (fileType.startsWith("application/sql")) {
-		return "https://www.shareicon.net/data/2015/09/07/97430_document_512x512.png";
-	} else if (fileType.startsWith("text/html")) {
-		return "https://cdn4.iconfinder.com/data/icons/smashicons-file-types-flat/56/22_-_HTML_File_Flat-512.png";
-	} else {
-		return "https://www.iconpacks.net/icons/2/free-file-icon-1453-thumb.png";
-	}
-};
+
+
 const remove = (index: number): void => {
 	images.value.splice(index, 1);
 };
-
+ 
 const buttonClicked = async (item: ImageItem): Promise<void> => {
-	if (item.id === 2) {
+	if (item.id === 2) { 
 		isLoading.value = true;
 
 		const res: AxiosResponse = await uploadFile(item);
 		if (res.status === 200) {
 			item.id = 1;
 		}
+		
+		console.log(item.id);
 	}
 	isLoading.value = false;
 };
+
+// save upload
 const save = async () => {
 	if (images.value.length > 0) {
 		isLoading.value = true;
@@ -212,11 +176,13 @@ const save = async () => {
 				}
 			}
 		}
+
 		ElMessage({
 			message: "👍 zo'r ketti",
 			type: "success",
 			plain: true,
 		});
+		
 		isLoading.value = false;
 	} else {
 		ElMessage.error('Please, add any file", "danger');
@@ -224,7 +190,7 @@ const save = async () => {
 };
 defineExpose({
 	handleFile,
-	getFileTpes,
+
 });
 </script>
 

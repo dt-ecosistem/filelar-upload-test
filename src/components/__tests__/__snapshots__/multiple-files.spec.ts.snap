@@ -2,7 +2,7 @@
 
 exports[`MultipleUpload > check to snapshot MultipleUpload 1`] = `
 "<div class="px-[50px] pt-[20px] flex w-full flex-wrap gap-10 items-end">
-  <!--chizish--><label for="inputField1" class="w-[230px] h-[200px] flex flex-col gap-3 justify-center items-center bg-slate-200 rounded-md shadow-lg cursor-pointer hover:bg-slate-300" title=""><input id="inputField1" type="file" multiple="" class="hidden"><i class="fa-solid fa-cloud-arrow-up text-[25px]"></i>
+  <!--chizish--><label for="inputField1" class="w-[230px] h-[200px] flex flex-col gap-3 justify-center items-center bg-slate-200 rounded-md shadow-lg cursor-pointer hover:bg-slate-300" title=""><input multiple="" id="inputField1" type="file" class="hidden"><i class="fa-solid fa-cloud-arrow-up text-[25px]"></i>
     <h1>Choose File</h1>
   </label><button class="px-5 py-3 rounded-full bg-blue-400 text-white flex gap-3 items-center justify-center" plain="true">
     <h1>Upload</h1>

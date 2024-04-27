@@ -1,6 +1,4 @@
 <template>
-  <p data-test-error-message >siz katta mg yukladiz  </p>
-  <p data-test-true>siz togri file kiritingiz </p>
   <div class="px-[50px] pt-[20px] flex items-end gap-10">
     <label
       :title="isHighSize ? 'Size is too high' : ''"
@@ -60,10 +58,20 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-const props = defineProps<{
-  maxSize: number;
-  typesSingle:string;
-}>();
+import { defineProps } from 'vue';
+
+const props = defineProps({
+  maxSize: {
+    type: Number,
+    default: 10 * 1024 * 1024 
+  },
+  typesSingle: {
+    type: String,
+    default: 'application/zip'
+  }
+});
+
+
 
 import {uploadFile} from "../api/upload";
 import {ElMessage} from "element-plus";
@@ -76,18 +84,11 @@ interface ImageItem {
 
 const fileType = ref("");
 const fileContent = ref("");
-
 const fileInput = ref<HTMLInputElement | null>(null);
 const isLoading = ref(false);
-
-
 console.log("prop",props)
-
-
-
 const choosenFile = ref<File | null>(null);
 const isHighSize = ref(false);
-
 
 
 const handleSingil = (event: Event): void => {
@@ -99,8 +100,12 @@ const handleSingil = (event: Event): void => {
       isHighSize.value = true;
     }
     fileType.value = file.type;
+if (props.typesSingle  != fileType.value) {
+  isHighSize.value = true;
+  return
+}
+    
 
-    if (props.typesSingle === fileType.value)  {
     if (fileType.value.startsWith("image/")) {
       const reader = new FileReader();
       reader.onload = () => {
@@ -114,7 +119,7 @@ const handleSingil = (event: Event): void => {
 
     }
 
-  }
+  
 };
 
 const isLoaded = ref(false);

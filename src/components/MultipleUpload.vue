@@ -6,9 +6,9 @@
 			v-for="(item, index) in images"
 			:key="index"
 		>
-		
+
 			<div
-				@click="buttonClicked(item)"
+				
 				class="w-[200px] h-[200px] relative flex clickCard"
 				:title="!item.size ? 'error' : ''"
 			>
@@ -76,7 +76,6 @@ const props = defineProps({
 		type: Number,
 		default: 10 * 1024 * 1024,
 	},
-
 	typesMulti: {
 		type: String,
 		default: "application/zip",
@@ -91,16 +90,12 @@ const images: Ref = ref([]);
 const fileInput: Ref = ref(null);
 const isLoading: Ref = ref(false);
 const isMaxCount: Ref = ref(false);
-
 console.log(props.multipl);
-
 const handleFile = (event: Event): void => {
 	const inputElement = event.target as HTMLInputElement;
 	const files: FileList | null = inputElement.files;
 console.log(files);
-
 	if (!files) return;
- 
 	if (images.value.length < props.maxElementCount && props.typesMulti ===files[0].type) {
 		const filesToProcess = Array.from(files).slice(0, props.maxElementCount - images.value.length);
 		if (files.length > props.maxElementCount) isMaxCount.value = true;
@@ -141,24 +136,8 @@ console.log(files);
 	}
 };
 
-
-
 const remove = (index: number): void => {
 	images.value.splice(index, 1);
-};
- 
-const buttonClicked = async (item: ImageItem): Promise<void> => {
-	if (item.id === 2) { 
-		isLoading.value = true;
-
-		const res: AxiosResponse = await uploadFile(item);
-		if (res.status === 200) {
-			item.id = 1;
-		}
-		
-		console.log(item.id);
-	}
-	isLoading.value = false;
 };
 
 // save upload
@@ -176,7 +155,6 @@ const save = async () => {
 				}
 			}
 		}
-
 		ElMessage({
 			message: "👍 zo'r ketti",
 			type: "success",

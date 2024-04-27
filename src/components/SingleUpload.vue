@@ -83,6 +83,8 @@ interface ImageItem {
 }
 
 const fileType = ref("");
+const isLoaded = ref(false);
+const isFailed = ref(false);
 const fileContent = ref("");
 const fileInput = ref<HTMLInputElement | null>(null);
 const isLoading = ref(false);
@@ -122,17 +124,18 @@ if (props.typesSingle  != fileType.value) {
   
 };
 
-const isLoaded = ref(false);
-const isFailed = ref(false);
+
 
 const save = async (): Promise<void> => {
   if (choosenFile.value) {
     isLoading.value = true;
-    const data = {} as ImageItem;
-    data.id = 0;
-    data.file = choosenFile.value;
-    data.size = isHighSize.value;
-    data.image = fileContent.value;
+    const data = {
+      id:0,
+    file: choosenFile.value,
+    size: isHighSize.value,
+    image:fileContent.value,
+    } as ImageItem;
+   
 
     try {
       await uploadFile(data);

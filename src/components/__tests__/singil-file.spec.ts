@@ -3,11 +3,12 @@ import { mount } from "@vue/test-utils";
 import SingleUpload from "../SingleUpload.vue";
 
 describe("SingleUpload", (test) => {
+
     // Hajmi juda katta
    test("should render error message with text 'Size is too high'", async () => {
     const wrapper = mount(SingleUpload, { props: { maxSize: 1,typesSingle:'text/plain' } });
     const inputElement = wrapper.find('input[type="file"]')
-      .element as HTMLInputElement;
+     .element as HTMLInputElement;
     const file = new File(["ffo"], "foo.txt", {
       type: "text/plain",
     });
@@ -44,8 +45,8 @@ describe("SingleUpload", (test) => {
 
     expect(wrapper.find("label").attributes("title")).toBe("");
   });
-
-// types 
+ 
+   // types 
   test("It is true that type comes from prescription", async () => {
     const wrapper = mount(SingleUpload, { props: { maxSize: 4 ,typesSingle:'application/zip'} });
     const inputElement = wrapper.find('input[type="file"]')

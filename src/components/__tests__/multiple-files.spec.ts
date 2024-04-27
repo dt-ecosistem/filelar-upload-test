@@ -6,7 +6,7 @@ describe("MultipleUpload", (test) => {
 
 	test("check to snapshot MultipleUpload", async () => {
 		const wrapper = mount(MultipleUpload, {
-			props: { maxSize: 4, maxElementCount: 4, multipl: true },
+			props: { maxSize: 4, maxFileCount: 4, isMultiple: true,fileType: "text/plain" },
 		});
 		expect(wrapper.html()).toMatchSnapshot();
 	});
@@ -14,7 +14,7 @@ describe("MultipleUpload", (test) => {
 	//  count error
 	test("should show an error message", async () => {
 		const wrapper = mount(MultipleUpload, {
-			props: { maxSize: 20, maxElementCount: 1, multipl: true ,typesMulti: "text/plain"},
+			props: { maxSize: 20, maxFileCount: 1, isMultiple: true ,fileType: "text/plain"},
 		});
 		const inputElement = wrapper.find('input[type="file"]').element as HTMLInputElement;
 		const file1 = new File(["foo"], "foo.txt", {
@@ -36,9 +36,9 @@ describe("MultipleUpload", (test) => {
 	});
 
 	// elemen tcount ok
-	test("should render multiple input with OK", async () => {
+	test("should render isMultiplee input with OK", async () => {
 		const wrapper = mount(MultipleUpload, {
-			props: { maxSize: 20, maxElementCount: 3, multipl: true,typesMulti: "text/plain"},
+			props: { maxSize: 20, maxFileCount: 3, isMultiple: true,fileType: "text/plain"},
 		});
 		const inputElement = wrapper.find('input[type="file"]').element as HTMLInputElement;
 		const file1 = new File(["foo"], "foo.txt", {
@@ -62,9 +62,9 @@ describe("MultipleUpload", (test) => {
 	});
 
 	//  max size error
-	test("should render multiple input  when siz is high", async () => {
+	test("should render isMultiplee input  when siz is high", async () => {
 		const wrapper = mount(MultipleUpload, {
-			props: { maxSize: 3, maxElementCount: 1, multipl: true,typesMulti: "text/plain" },
+			props: { maxSize: 3, maxFileCount: 1, isMultiple: true,fileType: "text/plain" },
 		});
 		const inputElement = wrapper.find('input[type="file"]').element as HTMLInputElement;
 		const file1 = new File(["fooof"], "foo.txt", {
@@ -82,9 +82,9 @@ describe("MultipleUpload", (test) => {
 	});
 
 	// max size ok
-	test("should render multiple input  when size is normal", async () => {
+	test("should render isMultiplee input  when size is normal", async () => {
 		const wrapper = mount(MultipleUpload, {
-			props: { maxSize: 4, maxElementCount: 1, multipl: true,typesMulti: "text/plain" },
+			props: { maxSize: 4, maxFileCount: 1, isMultiple: true,fileType: "text/plain" },
 		});
 		const inputElement = wrapper.find('input[type="file"]').element as HTMLInputElement;
 		const file1 = new File(["foo"], "foo.txt", {
@@ -101,11 +101,11 @@ describe("MultipleUpload", (test) => {
 		expect(wrapper.find(".clickCard").attributes("title")).toBe("");
 	});
 
-    // multipl
+    // isMultiple
 	test("multipil true false comes from the prescription", async () => {
 
 		const wrapper = mount(MultipleUpload, {
-			props: { maxSize: 3, maxElementCount: 2, multipl: false,typesMulti: "text/plain" },
+			props: { maxSize: 3, maxFileCount: 2, isMultiple: false,fileType: "text/plain" },
 		});
 
 		const inputElement = wrapper.find('input[type="file"]').element as HTMLInputElement;

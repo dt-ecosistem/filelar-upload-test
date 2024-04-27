@@ -4,22 +4,15 @@
 		<div
 			class="flex justify-center items-center dates"
 			v-for="(item, index) in images"
-			:key="index"
-		>
-
+			:key="index">
 			<div
-				
 				class="w-[200px] h-[200px] relative flex clickCard"
-				:title="!item.size ? 'error' : ''"
-			>
-				<img :src="getIcon(item.size!)" alt="" 		class="absolute fa-solid top-3 right-3 fa-circle-xmark text-red-600 text-[23px]"
-		>
-				
+				:title="!item.size ? 'error' : ''">
+				<img :src="getIcon(item.size!)" alt=""  class="absolute fa-solid top-3 right-3 fa-circle-xmark text-red-600 text-[23px]">
 
 				<button
 					class="absolute left-0 top-0 border-2 border-red-600 px-3 py-1 bg-white text-red-500 rounded-full text-[14px]"
-					@click="remove(index)"
-				>
+					@click="remove(index)">
 					Remove
 				</button>
 				<img :src="item.image" class="max-w-[100%] max-h-[100%]" />
@@ -30,9 +23,8 @@
 			class="w-[230px] h-[200px] flex flex-col gap-3 justify-center items-center bg-slate-200 rounded-md shadow-lg cursor-pointer hover:bg-slate-300"
 			:title="isMaxCount ? 'You select maximum count file' : ''"
 		>
-			
 			<input
-				multiple
+				isMultiplee
 				id="inputField1"
 				type="file"
 				class="hidden"
@@ -67,40 +59,48 @@ interface ImageItem {
 	id: number;
 }
 
-const props = defineProps({
-	maxElementCount: {
-		type: Number,
-		default: 10 * 1024 * 1024,
-	},
-	maxSize: {
-		type: Number,
-		default: 10 * 1024 * 1024,
-	},
-	typesMulti: {
-		type: String,
-		default: "application/zip",
-	},
-	multipl: {
-		type: Boolean,
-		default: true,
-	},
-});
+interface Props {
+	maxFileCount: number
+	maxSize: number
+	fileType: string
+	isMultiple: boolean
+}
+const props = defineProps<Props>()
+
+// const props = defineProps({
+// 	maxFileCount: {
+// 		type: Number,
+// 		default: 10 * 1024 * 1024,
+// 	},
+// 	maxSize: {
+// 		type: Number,
+// 		default: 10 * 1024 * 1024,
+// 	},
+// 	fileType: {
+// 		type: String,
+// 		default: "application/zip",
+// 	},
+// 	isMultiple: {
+// 		type: Boolean,
+// 		default: true,
+// 	},
+// });
 
 const images: Ref = ref([]);
 const fileInput: Ref = ref(null);
 const isLoading: Ref = ref(false);
 const isMaxCount: Ref = ref(false);
-console.log(props.multipl);
+console.log(props.isMultiple);
 const handleFile = (event: Event): void => {
 	const inputElement = event.target as HTMLInputElement;
 	const files: FileList | null = inputElement.files;
-console.log(files);
+     console.log(files);
 	if (!files) return;
-	if (images.value.length < props.maxElementCount && props.typesMulti ===files[0].type) {
-		const filesToProcess = Array.from(files).slice(0, props.maxElementCount - images.value.length);
-		if (files.length > props.maxElementCount) isMaxCount.value = true;
+	if (images.value.length < props.maxFileCount && props.fileType ===files[0].type) {
+		const filesToProcess = Array.from(files).slice(0, props.maxFileCount - images.value.length);
+		if (files.length > props.maxFileCount) isMaxCount.value = true;
 		
-		if (props.multipl === true) {
+		if (props.isMultiple === true) {
 			if (files.length === 0) {
 				isMaxCount.value = true;
 				return;
@@ -139,7 +139,6 @@ console.log(files);
 const remove = (index: number): void => {
 	images.value.splice(index, 1);
 };
-
 // save upload
 const save = async () => {
 	if (images.value.length > 0) {
@@ -168,7 +167,6 @@ const save = async () => {
 };
 defineExpose({
 	handleFile,
-
 });
 </script>
 
